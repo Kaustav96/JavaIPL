@@ -12,6 +12,7 @@ import com.kaustav.ipl.repository.PointsTableRepository;
 import com.kaustav.ipl.repository.ScoreRepository;
 import com.kaustav.ipl.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,16 @@ public class ScoreController {
     @Autowired
     private PointsTableRepository tableRepository;
 
-    private HashMap<Integer,Boolean> matchPointsCalculated = new HashMap<>();
+    private HashMap<Long,Boolean> matchPointsCalculated = new HashMap<>();
+    @GetMapping("/{matchId}")
+    public ResponseEntity<List<Score>> getScoreByMatchId(@PathVariable long matchId){
+        List<Score> score = scoreRepository.findByMatchId(matchId);
+        if(score!=null){
+            return new ResponseEntity<>(score,HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     @PostMapping
     public Score addScore(@RequestBody Score score){
         matchRepository.findById(score.getMatch().getId()).orElseThrow(
@@ -45,7 +55,6 @@ public class ScoreController {
         );
 
         return scoreRepository.save(score);
-
     }
 
     @GetMapping("/calculatePoints/{matchId}")
@@ -103,8 +112,8 @@ public class ScoreController {
 
             // calculate net run rate;
 
-            double netRunRateT1 = calculateNetRunRate(scoreT1, scoreT2, team1Points);
-            double netRunRateT2 = calculateNetRunRate(scoreT2, scoreT1, team2Points);
+            double netRunRateT1 = calculateNetRunRate(scoreT1, scoreT2);
+            double netRunRateT2 = calculateNetRunRate(scoreT2, scoreT1);
 
             team1Points.setNrr((team1Points.getNrr() == null ? 0.0 : team1Points.getNrr()) + netRunRateT1);
             team2Points.setNrr((team2Points.getNrr() == null ? 0.0 : team2Points.getNrr()) + netRunRateT2);
@@ -112,10 +121,7 @@ public class ScoreController {
             List<PointsTable> pointsTables = Arrays.asList(team1Points, team2Points);
 
             savePointsTableBySorting(pointsTables);
-            matchPointsCalculated.put((int) matchId, true);
-            System.out.println(team1Points);
-            System.out.println(team2Points);
-            System.out.println(netRunRateT1 + "," + netRunRateT2);
+            matchPointsCalculated.put(matchId, true);
             return ResponseEntity.ok("Points Calculated");
         }else{
             return ResponseEntity.badRequest().body("Points for this match have been calculated already!!!!");
@@ -128,7 +134,7 @@ public class ScoreController {
         tableRepository.saveAll(pointsTables);
     }
 
-    private double calculateNetRunRate(Score a, Score b, PointsTable p) {
+    private double calculateNetRunRate(Score a, Score b) {
         int runsScored = a.getRuns();
         int runsConceded = b.getRuns();
         double oversPlayedT1 = a.getOversPlayed();
