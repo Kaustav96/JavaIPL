@@ -26,7 +26,6 @@ public class Score {
     @JoinColumn(name = "match_id")
     private Match match;
 
-    @OneToOne
-    @JoinColumn(name = "team_id")
-    private Team team;
+    @Column(name = "team_id")
+    private Long team_id;
 }

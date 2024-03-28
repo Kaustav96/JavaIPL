@@ -1,6 +1,7 @@
 // import logo from './logo.svg';
 import './App.css';
 // import axios from 'axios';
+import PointsTable from './PointsTable/PointsTable';
 import React,{useState, useEffect} from 'react';
 function App() {
   // State to store form data

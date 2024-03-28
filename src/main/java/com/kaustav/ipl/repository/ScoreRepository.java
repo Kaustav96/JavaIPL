@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ScoreRepository extends JpaRepository<Score,Long> {
-    @Query("SELECT s FROM Score s WHERE s.match.id = :matchId AND s.team.id = :teamId")
+    @Query("SELECT s FROM Score s WHERE s.match.id = :matchId AND s.team_id = :teamId")
     Score findByMatchIdAndTeamId(@Param("matchId") Long matchId, @Param("teamId") Long teamId);
     @Query("SELECT s FROM Score s WHERE s.match.id = :matchId")
     List<Score> findByMatchId(@Param("matchId") Long matchId);

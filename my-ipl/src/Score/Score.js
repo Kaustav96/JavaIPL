@@ -32,8 +32,8 @@ const Score = () => {
       const scoreResponse = await axios.get(`http://localhost:8080/v1/scores/${matchId}`);
       if(scoreResponse.data && scoreResponse.data.length>0){
         // console.log(scoreResponse.data)
-        const homeTeamScore = scoreResponse.data.find(score => score.team.id === homeTeamId);
-        const awayTeamScore = scoreResponse.data.find(score => score.team.id === awayTeamId);
+        const homeTeamScore = scoreResponse.data.find(score => score.team_id === homeTeamId);
+        const awayTeamScore = scoreResponse.data.find(score => score.team_id === awayTeamId);
         console.log(homeTeamScore);
         console.log(awayTeamScore);
         if(homeTeamScore){
@@ -80,10 +80,7 @@ const Score = () => {
         match: {
           id: parseInt(matchId)
         },
-        team:{
-          id: parseInt(homeTeamId)
-        }
-        
+        team_id:parseInt(homeTeamId)
       };
       const requestBody2 = {
         runs: parseInt(awayTeamRuns),
@@ -92,9 +89,7 @@ const Score = () => {
         match: {
           id: parseInt(matchId)
         },
-        team:{
-          id: parseInt(awayTeamId)
-        }
+        team_id: parseInt(awayTeamId)
       }
       console.log(requestBody1)
       console.log(requestBody2)

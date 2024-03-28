@@ -50,7 +50,7 @@ public class ScoreController {
         matchRepository.findById(score.getMatch().getId()).orElseThrow(
                 ()-> new MatchDoesNotExistException("Match doesn't exist")
         );
-        teamRepository.findById(score.getTeam().getId()).orElseThrow(
+        teamRepository.findById(score.getTeam_id()).orElseThrow(
                 ()-> new TeamNotFoundException("Team doesn't exist")
         );
 
@@ -103,8 +103,8 @@ public class ScoreController {
             // update the total number of matches being played.
             int team1TotalMatchesPlayed = team1Points.getMatches();
             int team2TotalMatchesPlayed = team2Points.getMatches();
-            team1TotalMatchesPlayed += team1Points.getNr() + team1Points.getWon() + team1Points.getLost() + team1Points.getTied();
-            team2TotalMatchesPlayed += team1Points.getNr() + team1Points.getWon() + team1Points.getLost() + team1Points.getTied();
+            team1TotalMatchesPlayed = team1Points.getNr() + team1Points.getWon() + team1Points.getLost() + team1Points.getTied();
+            team2TotalMatchesPlayed = team1Points.getNr() + team1Points.getWon() + team1Points.getLost() + team1Points.getTied();
 
             team1Points.setMatches(team1TotalMatchesPlayed);
             team2Points.setMatches(team2TotalMatchesPlayed);
