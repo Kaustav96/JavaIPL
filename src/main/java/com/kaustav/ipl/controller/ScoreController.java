@@ -104,7 +104,7 @@ public class ScoreController {
             int team1TotalMatchesPlayed = team1Points.getMatches();
             int team2TotalMatchesPlayed = team2Points.getMatches();
             team1TotalMatchesPlayed = team1Points.getNr() + team1Points.getWon() + team1Points.getLost() + team1Points.getTied();
-            team2TotalMatchesPlayed = team1Points.getNr() + team1Points.getWon() + team1Points.getLost() + team1Points.getTied();
+            team2TotalMatchesPlayed = team2Points.getNr() + team2Points.getWon() + team2Points.getLost() + team2Points.getTied();
 
             team1Points.setMatches(team1TotalMatchesPlayed);
             team2Points.setMatches(team2TotalMatchesPlayed);
